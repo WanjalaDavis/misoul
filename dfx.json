@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "misoul_backend": {
+      "main": "src/misoul_backend/main.mo",
+      "type": "motoko"
+    },
+    "misoul_frontend": {
+      "dependencies": [
+        "misoul_backend"
+      ],
+      "source": [
+        "src/misoul_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "misoul_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
