@@ -14,5 +14,9 @@
   "type": "module",
   "workspaces": [
     "src/misoul_frontend"
-  ]
+  ],
+  "dependencies": {
+    "@dfinity/auth-client": "^3.1.0",
+    "recharts": "^3.1.0"
+  }
 }
