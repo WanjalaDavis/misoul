@@ -2,6 +2,11 @@
 // GLOBAL VARIABLES & THEMING SYSTEM
 // =============================================
 
+@use "sass:map";
+@use "sass:color";
+@use "sass:math";
+
+
 // International Color System (WCAG AA compliant)
 $colors: (
   primary: #7b1fa2,         // Deep purple (primary brand color)
@@ -1736,4 +1741,644 @@ $colors: (
     color: #000 !important;
     text-decoration: underline !important;
   }
+}
+
+// =============================================
+// GLOBAL VARIABLES & THEMING SYSTEM (Modernized)
+// =============================================
+// International Color System (WCAG AA compliant)
+$colors: (
+  primary: #7b1fa2,         // Deep purple (primary brand color)
+  primary-light: #ae52d4,   // Lighter purple
+  primary-dark: #4a0072,    // Darker purple
+  secondary: #616161,       // Gray
+  success: #388e3c,         // Green
+  danger: #d32f2f,          // Red
+  warning: #ffa000,         // Amber
+  info: #0097a7,            // Teal
+  light: #f5f5f5,           // Light gray
+  dark: #212121,            // Dark gray
+  text-light: #ffffff,
+  text-dark: #212121,
+  bg-light: #ffffff,
+  bg-dark: #121212,
+  card-bg-light: #ffffff,
+  card-bg-dark: #1e1e1e,
+  border-light: #e0e0e0,
+  border-dark: #333333
+);
+
+// Mood colors for international emotional recognition
+$mood-colors: (
+  happy: #4CAF50,       // Green
+  sad: #9C27B0,         // Purple
+  angry: #F44336,       // Red
+  excited: #FFC107,     // Amber
+  peaceful: #3F51B5,    // Indigo
+  neutral: #607D8B,     // Blue gray
+  anxious: #FF5722,     // Deep orange
+  loved: #E91E63,       // Pink
+  grateful: #00BCD4,    // Cyan
+  tired: #795548        // Brown
+);
+
+// Typography system for multilingual support
+$font-stack: (
+  base: ('Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'),
+  heading: ('Montserrat', 'Arial Rounded MT Bold', 'Helvetica Neue', sans-serif),
+  mono: ('SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace)
+);
+
+// Spacing system (8px base)
+$spacing: (
+  xs: 0.25rem,    // 4px
+  sm: 0.5rem,     // 8px
+  md: 1rem,       // 16px
+  lg: 1.5rem,     // 24px
+  xl: 2rem,       // 32px
+  xxl: 3rem       // 48px
+);
+
+// Breakpoints for responsive design
+$breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+);
+
+// Animation timing
+$timing: (
+  fast: 0.15s,
+  medium: 0.3s,
+  slow: 0.45s
+);
+
+// Elevation levels (material design inspired)
+$elevation: (
+  0: none,
+  1: 0 1px 3px rgba(0,0,0,0.12),
+  2: 0 4px 6px rgba(0,0,0,0.1),
+  3: 0 10px 20px rgba(0,0,0,0.1),
+  4: 0 20px 25px rgba(0,0,0,0.1),
+  5: 0 25px 50px rgba(0,0,0,0.1)
+);
+
+// =============================================
+// MODERNIZED MIXINS & FUNCTIONS
+// =============================================
+
+// Color function
+@function color($key) {
+  @return map.get($colors, $key);
+}
+
+// Mood color function
+@function mood-color($key) {
+  @return map.get($mood-colors, $key);
+}
+
+// Font stack function
+@function font($key) {
+  @return map.get($font-stack, $key);
+}
+
+// Spacing function
+@function space($key) {
+  @return map.get($spacing, $key);
+}
+
+// Breakpoint mixin
+@mixin breakpoint($size) {
+  @media (min-width: map.get($breakpoints, $size)) {
+    @content;
+  }
+}
+
+// Elevation mixin
+@mixin elevation($level) {
+  box-shadow: map.get($elevation, $level);
+}
+
+// RTL support mixin
+@mixin rtl {
+  [dir="rtl"] & {
+    @content;
+  }
+}
+
+// Dark mode mixin
+@mixin dark-mode {
+  [data-bs-theme="dark"] & {
+    @content;
+  }
+}
+
+// Animation mixins
+@mixin fade-in($duration: medium) {
+  animation: fadeIn map.get($timing, $duration) ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+// Chatbot SCSS - Premium Design System
+
+
+// ==============
+// Design Tokens
+// ==============
+$chatbot-theme: (
+  "primary": #6e45e2,
+  "secondary": #88d3ce,
+  "accent": #ff7e5f,
+  "dark": #2a2d3b,
+  "light": #f9f9ff,
+  "success": #4caf50,
+  "warning": #ffc107,
+  "danger": #f44336,
+  "info": #2196f3
+);
+
+$spacing: (
+  "xs": 0.25rem,
+  "sm": 0.5rem,
+  "md": 1rem,
+  "lg": 1.5rem,
+  "xl": 2rem,
+  "xxl": 3rem
+);
+
+$border-radius: (
+  "sm": 4px,
+  "md": 8px,
+  "lg": 12px,
+  "pill": 999px,
+  "circle": 50%
+);
+
+$shadow: (
+  "sm": 0 1px 3px rgba(0,0,0,0.12),
+  "md": 0 4px 6px rgba(0,0,0,0.1),
+  "lg": 0 10px 15px rgba(0,0,0,0.1),
+  "xl": 0 20px 25px rgba(0,0,0,0.1),
+  "inner": inset 0 2px 4px rgba(0,0,0,0.06)
+);
+
+$transition: (
+  "fast": 0.15s ease-in-out,
+  "normal": 0.3s ease-in-out,
+  "slow": 0.45s ease-in-out
+);
+
+// ==============
+// Mixins
+// ==============
+@mixin gradient-bg($angle: 135deg, $color1: map.get($chatbot-theme, "primary"), $color2: map.get($chatbot-theme, "secondary")) {
+  background: linear-gradient($angle, $color1, $color2);
+}
+
+@mixin glass-effect($blur: 10px, $opacity: 0.2) {
+  background: rgba(255, 255, 255, $opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+}
+
+@mixin pulse-animation($color: map.get($chatbot-theme, "primary")) {
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba($color, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba($color, 0); }
+    100% { box-shadow: 0 0 0 0 rgba($color, 0); }
+  }
+  animation: pulse 1.5s infinite;
+}
+
+@mixin floating($distance: map.get($spacing, "sm")) {
+  @keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-$distance); }
+    100% { transform: translateY(0px); }
+  }
+  animation: floating 3s ease-in-out infinite;
+}
+
+// ==============
+// Chatbot Styles
+// ==============
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
+  max-height: 800px;
+  border-radius: map.get($border-radius, "lg");
+  overflow: hidden;
+  box-shadow: map.get($shadow, "xl");
+  background: map.get($chatbot-theme, "light");
+  transition: map.get($transition, "normal");
+  
+  .dark-mode & {
+    background: darken(map.get($chatbot-theme, "dark"), 5%);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+}
+
+.chat-header {
+  padding: map.get($spacing, "lg") map.get($spacing, "xl");
+  @include gradient-bg();
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  
+  h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  p {
+    margin: map.get($spacing, "xs") 0 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 2;
+  }
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    transform: rotate(30deg);
+    z-index: 1;
+  }
+}
+
+.chat-messages {
+  flex: 1;
+  padding: map.get($spacing, "lg");
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  @include glass-effect(5px, 0.05);
+  
+  .dark-mode & {
+    @include glass-effect(5px, 0.1);
+  }
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(map.get($chatbot-theme, "primary"), 0.05);
+    border-radius: map.get($border-radius, "pill");
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(map.get($chatbot-theme, "primary"), 0.2);
+    border-radius: map.get($border-radius, "pill");
+    
+    &:hover {
+      background: rgba(map.get($chatbot-theme, "primary"), 0.3);
+    }
+  }
+}
+
+.empty-chat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: map.get($chatbot-theme, "dark");
+  opacity: 0.7;
+  
+  .dark-mode & {
+    color: map.get($chatbot-theme, "light");
+  }
+  
+  i {
+    font-size: 3rem;
+    margin-bottom: map.get($spacing, "md");
+    color: map.get($chatbot-theme, "primary");
+    @include floating();
+  }
+  
+  p {
+    max-width: 80%;
+    margin-bottom: map.get($spacing, "xl");
+  }
+}
+
+.suggestions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: map.get($spacing, "sm");
+  width: 100%;
+  max-width: 600px;
+  
+  .suggestion-btn {
+    padding: map.get($spacing, "sm");
+    background: rgba(map.get($chatbot-theme, "primary"), 0.1);
+    border: 1px solid rgba(map.get($chatbot-theme, "primary"), 0.2);
+    border-radius: map.get($border-radius, "md");
+    color: map.get($chatbot-theme, "primary");
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: map.get($transition, "fast");
+    
+    &:hover {
+      background: rgba(map.get($chatbot-theme, "primary"), 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .dark-mode & {
+      background: rgba(map.get($chatbot-theme, "primary"), 0.2);
+      color: lighten(map.get($chatbot-theme, "primary"), 15%);
+      
+      &:hover {
+        background: rgba(map.get($chatbot-theme, "primary"), 0.3);
+      }
+    }
+  }
+}
+
+.message {
+  margin-bottom: map.get($spacing, "md");
+  max-width: 85%;
+  position: relative;
+  transition: map.get($transition, "normal");
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+  
+  .message-sender {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: map.get($spacing, "xs");
+    opacity: 0.8;
+  }
+  
+  .message-content {
+    padding: map.get($spacing, "md");
+    border-radius: map.get($border-radius, "md");
+    line-height: 1.5;
+    position: relative;
+    box-shadow: map.get($shadow, "sm");
+    
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      width: 0;
+      height: 0;
+      border-style: solid;
+    }
+  }
+  
+  .message-time {
+    font-size: 0.7rem;
+    opacity: 0.6;
+    margin-top: map.get($spacing, "xs");
+    text-align: right;
+  }
+}
+
+.user-message {
+  align-self: flex-end;
+  
+  .message-sender {
+    text-align: right;
+    color: map.get($chatbot-theme, "primary");
+  }
+  
+  .message-content {
+    background: map.get($chatbot-theme, "primary");
+    color: white;
+    border-top-right-radius: map.get($border-radius, "xs");
+    
+    &::after {
+      right: 0;
+      border-width: 8px 0 0 8px;
+      border-color: transparent transparent transparent map.get($chatbot-theme, "primary");
+    }
+  }
+}
+
+.bot-message {
+  align-self: flex-start;
+  
+  .message-sender {
+    color: map.get($chatbot-theme, "accent");
+  }
+  
+  .message-content {
+    background: white;
+    color: map.get($chatbot-theme, "dark");
+    border-top-left-radius: map.get($border-radius, "xs");
+    
+    .dark-mode & {
+      background: lighten(map.get($chatbot-theme, "dark"), 10%);
+      color: map.get($chatbot-theme, "light");
+    }
+    
+    &::after {
+      left: 0;
+      border-width: 8px 8px 0 0;
+      border-color: white transparent transparent transparent;
+      
+      .dark-mode & {
+        border-color: lighten(map.get($chatbot-theme, "dark"), 10%) transparent transparent transparent;
+      }
+    }
+  }
+}
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  
+  span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: map.get($chatbot-theme, "accent");
+    border-radius: map.get($border-radius, "circle");
+    margin-right: map.get($spacing, "xs");
+    opacity: 0.4;
+    
+    &:nth-child(1) {
+      animation: typing-pulse 1s infinite;
+    }
+    &:nth-child(2) {
+      animation: typing-pulse 1s infinite 0.2s;
+    }
+    &:nth-child(3) {
+      animation: typing-pulse 1s infinite 0.4s;
+    }
+  }
+}
+
+@keyframes typing-pulse {
+  0% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0.4; transform: scale(0.9); }
+}
+
+.chat-input-container {
+  padding: map.get($spacing, "md");
+  border-top: 1px solid rgba(map.get($chatbot-theme, "primary"), 0.1);
+  background: white;
+  
+  .dark-mode & {
+    background: map.get($chatbot-theme, "dark");
+    border-top-color: rgba(map.get($chatbot-theme, "light"), 0.1);
+  }
+}
+
+.chat-error {
+  color: map.get($chatbot-theme, "danger");
+  font-size: 0.8rem;
+  margin-bottom: map.get($spacing, "sm");
+  text-align: center;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  border-radius: map.get($border-radius, "pill");
+  overflow: hidden;
+  box-shadow: map.get($shadow, "sm");
+  transition: map.get($transition, "fast");
+  
+  &:focus-within {
+    box-shadow: 0 0 0 2px rgba(map.get($chatbot-theme, "primary"), 0.2);
+  }
+}
+
+.chat-input {
+  flex: 1;
+  border: none;
+  padding: map.get($spacing, "md") map.get($spacing, "lg");
+  font-size: 0.95rem;
+  background: map.get($chatbot-theme, "light");
+  
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .dark-mode & {
+    background: darken(map.get($chatbot-theme, "dark"), 3%);
+    color: map.get($chatbot-theme, "light");
+    
+    &::placeholder {
+      color: rgba(map.get($chatbot-theme, "light"), 0.5);
+    }
+  }
+}
+
+.send-button {
+  border: none;
+  padding: map.get($spacing, "md") map.get($spacing, "lg");
+  @include gradient-bg();
+  color: white;
+  cursor: pointer;
+  transition: map.get($transition, "fast");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    opacity: 0.9;
+    transform: translateX(2px);
+  }
+  
+  &:disabled {
+    background: gray;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  i {
+    font-size: 1.2rem;
+  }
+}
+
+// ==============
+// Responsive Adjustments
+// ==============
+@media (max-width: 768px) {
+  .chat-container {
+    height: 65vh;
+    border-radius: 0;
+  }
+  
+  .chat-header {
+    padding: map.get($spacing, "md");
+  }
+  
+  .message {
+    max-width: 90%;
+  }
+  
+  .suggestions {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ==============
+// Special Effects
+// ==============
+.chat-container {
+  perspective: 1000px;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    
+    .dark-mode & {
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+    }
+  }
+}
+
+.send-button {
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255,255,255,0.1);
+    transform: rotate(30deg);
+    transition: map.get($transition, "normal");
+    opacity: 0;
+  }
+  
+  &:hover::after {
+    animation: shine 1.5s;
+  }
+}
+
+@keyframes shine {
+  0% { opacity: 0; left: -50%; }
+  50% { opacity: 0.3; }
+  100% { opacity: 0; left: 150%; }
 }

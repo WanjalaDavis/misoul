@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import "./index.scss";
+import { chatWithGPT } from "./api/openai";
 
 // Helper: Detect MIME type based on media kind
 const getMimeType = (type) => {
@@ -48,6 +49,10 @@ export default function App() {
   const [mediaDescription, setMediaDescription] = useState("");
   const [activeTab, setActiveTab] = useState("memories");
   const [searchTerm, setSearchTerm] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatInput, setChatInput] = useState("");
+  const [chatLoading, setChatLoading] = useState(false);
+  const [chatError, setChatError] = useState("");
 
   useEffect(() => {
     document.documentElement.setAttribute(
@@ -74,6 +79,50 @@ export default function App() {
       setMediaPreview(null);
     }
   }, [mediaFile, contentType]);
+
+
+
+  const chatWithEchoSoul = async () => {
+  const trimmedInput = chatInput.trim();
+  if (!trimmedInput) return;
+
+  try {
+    const userMessage = {
+      sender: "user",
+      text: trimmedInput,
+      timestamp: new Date().toISOString()
+    };
+    setChatMessages(prev => [...prev, userMessage]);
+    setChatInput("");
+    setLoading(true);
+
+    // 🧠 Build conversation messages (just history + new input)
+    const messages = [
+      ...chatMessages.map((msg) => ({
+        role: msg.sender === "user" ? "user" : "assistant",
+        content: msg.text
+      })),
+      { role: "user", content: trimmedInput }
+    ];
+
+    // 🤖 Call GPT via openai.js (which handles memory summary)
+    const responseText = await chatWithGPT(messages); // no principal passed
+
+    const botMessage = {
+      sender: "bot",
+      text: responseText,
+      timestamp: new Date().toISOString()
+    };
+
+    setChatMessages(prev => [...prev, botMessage]);
+  } catch (error) {
+    console.error("Chat error:", error);
+    setError("Failed to get response from misoul.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -507,6 +556,12 @@ export default function App() {
                     >
                       <i className="bi bi-plus-circle"></i> New Memory
                     </button>
+                    <button
+                    className={`nav-tab ${activeTab === "chat" ? "active" : ""}`}
+                    onClick={() => setActiveTab("chat")}
+                  >
+                    <i className="bi bi-robot"></i> MiSoul ChatBot
+                  </button>
                   </nav>
 
                   {activeTab === "new" && (
@@ -630,6 +685,104 @@ export default function App() {
                     </div>
                   )}
 
+
+
+
+                        {activeTab === "chat" && (
+                        <div className="chat-container">
+                          <div className="chat-header">
+                            <h3>MiSoul ChatBot</h3>
+                            <p>Your AI companion for memory exploration and reflection</p>
+                          </div>
+                          
+                          <div className="chat-messages">
+                            {chatMessages.length === 0 ? (
+                              <div className="empty-chat">
+                                <i className="bi bi-robot"></i>
+                                <p>Hi {username || 'there'}! I'm MiSoul. How can I help you reflect today?</p>
+                                <div className="suggestions">
+                                  <button 
+                                    className="suggestion-btn"
+                                    onClick={() => setChatInput("What's been on your mind lately?")}
+                                  >
+                                    What's been on your mind lately?
+                                  </button>
+                                  <button 
+                                    className="suggestion-btn"
+                                    onClick={() => setChatInput("Analyze my recent moods")}
+                                  >
+                                    Analyze my recent moods
+                                  </button>
+                                  <button 
+                                    className="suggestion-btn"
+                                    onClick={() => setChatInput("Help me remember something important")}
+                                  >
+                                    Help me remember something important
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              chatMessages.map((msg, index) => (
+                                <div 
+                                  key={index} 
+                                  className={`message ${msg.sender === 'user' ? 'user-message' : 'bot-message'}`}
+                                >
+                                  <div className="message-sender">
+                                    {msg.sender === 'user' ? 'You' : 'MiSoul'}
+                                  </div>
+                                  <div className="message-content">
+                                    {msg.text}
+                                  </div>
+                                  <div className="message-time">
+                                    {new Date(msg.timestamp).toLocaleTimeString()}
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                            {chatLoading && (
+                              <div className="message bot-message">
+                                <div className="message-sender">MiSoul</div>
+                                <div className="message-content">
+                                  <div className="typing-indicator">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="chat-input-container">
+                            {chatError && <div className="chat-error">{chatError}</div>}
+                            <div className="input-group">
+                              <input
+                                type="text"
+                                className="form-control chat-input"
+                                placeholder="Talk to MiSoul..."
+                                value={chatInput}
+                                onChange={(e) => setChatInput(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && chatWithEchoSoul()}
+                              />
+                              <button
+                                className="btn btn-primary send-button"
+                                onClick={chatWithEchoSoul}
+                                disabled={chatLoading || !chatInput.trim()}
+                              >
+                                {chatLoading ? (
+                                  <span className="spinner-border spinner-border-sm" role="status"></span>
+                                ) : (
+                                  <i className="bi bi-send-fill"></i>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+
+
+
                   {activeTab === "memories" && (
                     <div className="memories-container">
                       <div className="memories-header">
@@ -725,6 +878,7 @@ export default function App() {
                       )}
                     </div>
                   )}
+
                 </>
               ) : (
                 <div className="welcome-screen">
